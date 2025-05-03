@@ -1,12 +1,16 @@
 
 import React, { useState } from "react";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import FacultySearch from "@/components/FacultySearch";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import FacultyLocationBox from "@/components/FacultyLocationBox";
+import AddFacultyForm from "@/components/AddFacultyForm";
 import { Faculty } from "@/utils/types";
 import { findFacultyByName } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
+import { UserPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
@@ -25,6 +29,10 @@ const Index = () => {
       });
     }
   };
+  
+  const handleFacultyAdded = (facultyName: string) => {
+    handleSearch(facultyName);
+  };
 
   return (
     <div className="min-h-screen bg-faculty-background">
@@ -36,7 +44,38 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <FacultySearch onSearch={handleSearch} />
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex-1">
+            <FacultySearch onSearch={handleSearch} />
+          </div>
+          
+          <div className="ml-4 hidden md:block">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button>
+                  <UserPlus size={16} className="mr-2" />
+                  Add Faculty
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Add New Faculty</SheetTitle>
+                  <SheetDescription>
+                    Enter faculty name to create with auto-generated schedule
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-6">
+                  <AddFacultyForm onFacultyAdded={handleFacultyAdded} />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+        
+        {/* Mobile Add Faculty Form */}
+        <div className="md:hidden mb-8">
+          <AddFacultyForm onFacultyAdded={handleFacultyAdded} />
+        </div>
 
         {!selectedFaculty ? (
           <Card>

@@ -1,4 +1,3 @@
-
 import { ClassSession, DayOfWeek, Faculty, Room, TimeSlot } from "./types";
 
 // Define buildings and rooms
@@ -146,6 +145,19 @@ export const findFacultyByName = (name: string): Faculty | undefined => {
   );
 };
 
+// Add new faculty member with auto-generated schedule
+export const addFacultyMember = (name: string): Faculty => {
+  const id = `F${(facultyData.length + 1).toString().padStart(3, '0')}`;
+  const newFaculty: Faculty = {
+    id,
+    name,
+    schedule: generateWeeklySchedule()
+  };
+  
+  facultyData.push(newFaculty);
+  return newFaculty;
+};
+
 // Get all faculty names for dropdown
 export const getAllFacultyNames = (): string[] => {
   return facultyData.map(faculty => faculty.name);
@@ -216,7 +228,7 @@ export const getFacultyLocationMessage = (faculty: Faculty): { message: string; 
   
   if (!currentTimeSlot) {
     return { 
-      message: "Outside of school hours. Faculty is likely not on campus." 
+      message: "Outside of college hours. Faculty is likely not on campus." 
     };
   }
   
