@@ -1,3 +1,4 @@
+
 import { ClassSession, DayOfWeek, Faculty, Room, TimeSlot } from "./types";
 
 // Define buildings and rooms
@@ -65,6 +66,19 @@ const generateUniqueClassSession = (timeSlot: TimeSlot): ClassSession => {
   };
 };
 
+// Helper function to create a special session (LAB or SRP)
+const createSpecialSession = (specialType: string, timeSlotStart: string, timeSlotEnd: string): ClassSession => {
+  const room = getRandomRoom();
+  return {
+    room: {
+      ...room,
+      department: specialType // Set the department to the special type (LAB or SRP)
+    },
+    timeSlot: { startTime: timeSlotStart, endTime: timeSlotEnd },
+    isLunch: false
+  };
+};
+
 // Generate a complete day schedule for a faculty member
 const generateDaySchedule = () => {
   const sessions: ClassSession[] = [];
@@ -91,9 +105,9 @@ const generateDaySchedule = () => {
   return { sessions };
 };
 
-// Generate a complete weekly schedule
-const generateWeeklySchedule = () => {
-  return {
+// Generate a complete weekly schedule with special modifications for specific faculty
+const generateWeeklySchedule = (facultyName?: string) => {
+  const schedule = {
     [DayOfWeek.MONDAY]: generateDaySchedule(),
     [DayOfWeek.TUESDAY]: generateDaySchedule(),
     [DayOfWeek.WEDNESDAY]: generateDaySchedule(),
@@ -101,6 +115,60 @@ const generateWeeklySchedule = () => {
     [DayOfWeek.FRIDAY]: generateDaySchedule(),
     [DayOfWeek.SATURDAY]: generateDaySchedule()
   };
+
+  // Apply special modifications for specific faculty
+  if (facultyName) {
+    if (facultyName === "Nethrasri") {
+      // Modify Nethrasri's Monday schedule from 1:05 to 3:30 to LAB
+      const labSession = createSpecialSession("LAB", "13:05", "15:30");
+      
+      // Filter out any classes in this time range
+      schedule[DayOfWeek.MONDAY].sessions = schedule[DayOfWeek.MONDAY].sessions.filter(session => 
+        session.isLunch || !(session.timeSlot.startTime >= "13:05" && session.timeSlot.startTime < "15:30")
+      );
+      
+      // Add the LAB session
+      schedule[DayOfWeek.MONDAY].sessions.push(labSession);
+    }
+    else if (facultyName === "Saritha") {
+      // Modify Saritha's Tuesday schedule from 9:00 to 11:30
+      const specialSession = createSpecialSession("SPECIAL CLASS", "09:00", "11:30");
+      
+      // Filter out any classes in this time range
+      schedule[DayOfWeek.TUESDAY].sessions = schedule[DayOfWeek.TUESDAY].sessions.filter(session => 
+        session.isLunch || !(session.timeSlot.startTime >= "09:00" && session.timeSlot.startTime < "11:30")
+      );
+      
+      // Add the special session
+      schedule[DayOfWeek.TUESDAY].sessions.push(specialSession);
+    }
+    else if (facultyName === "Sravani") {
+      // Modify Sravani's Saturday schedule from 1:05 to 3:30
+      const specialSession = createSpecialSession("SPECIAL CLASS", "13:05", "15:30");
+      
+      // Filter out any classes in this time range
+      schedule[DayOfWeek.SATURDAY].sessions = schedule[DayOfWeek.SATURDAY].sessions.filter(session => 
+        session.isLunch || !(session.timeSlot.startTime >= "13:05" && session.timeSlot.startTime < "15:30")
+      );
+      
+      // Add the special session
+      schedule[DayOfWeek.SATURDAY].sessions.push(specialSession);
+    }
+    else if (facultyName === "Rajini") {
+      // Modify Rajini's Wednesday schedule from 9:00 to 11:30 to SRP
+      const srpSession = createSpecialSession("SRP", "09:00", "11:30");
+      
+      // Filter out any classes in this time range
+      schedule[DayOfWeek.WEDNESDAY].sessions = schedule[DayOfWeek.WEDNESDAY].sessions.filter(session => 
+        session.isLunch || !(session.timeSlot.startTime >= "09:00" && session.timeSlot.startTime < "11:30")
+      );
+      
+      // Add the SRP session
+      schedule[DayOfWeek.WEDNESDAY].sessions.push(srpSession);
+    }
+  }
+
+  return schedule;
 };
 
 // Generate faculty data
@@ -118,12 +186,12 @@ export const facultyData: Faculty[] = [
   { 
     id: "F003", 
     name: "Saritha",
-    schedule: generateWeeklySchedule()
+    schedule: generateWeeklySchedule("Saritha")
   },
   { 
     id: "F004", 
     name: "Nethrasri",
-    schedule: generateWeeklySchedule()
+    schedule: generateWeeklySchedule("Nethrasri")
   },
   { 
     id: "F005", 
@@ -133,7 +201,12 @@ export const facultyData: Faculty[] = [
   { 
     id: "F006", 
     name: "Rajini",
-    schedule: generateWeeklySchedule()
+    schedule: generateWeeklySchedule("Rajini")
+  },
+  { 
+    id: "F007", 
+    name: "Sravani",
+    schedule: generateWeeklySchedule("Sravani")
   }
 ];
 
@@ -151,7 +224,7 @@ export const addFacultyMember = (name: string): Faculty => {
   const newFaculty: Faculty = {
     id,
     name,
-    schedule: generateWeeklySchedule()
+    schedule: generateWeeklySchedule(name) // Pass the name to apply any special rules if needed
   };
   
   facultyData.push(newFaculty);
