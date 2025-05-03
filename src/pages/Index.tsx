@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import FacultySearch from "@/components/FacultySearch";
 import WeeklySchedule from "@/components/WeeklySchedule";
+import FacultyLocationBox from "@/components/FacultyLocationBox";
 import { Faculty } from "@/utils/types";
 import { findFacultyByName } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
@@ -62,6 +63,8 @@ const Index = () => {
               <h2 className="text-2xl font-bold text-faculty-primary">{selectedFaculty.name}'s Schedule</h2>
               <p className="text-gray-600">Faculty ID: {selectedFaculty.id}</p>
             </div>
+            
+            <FacultyLocationBox faculty={selectedFaculty} />
             <WeeklySchedule faculty={selectedFaculty} />
           </>
         )}

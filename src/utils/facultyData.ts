@@ -1,3 +1,4 @@
+
 import { ClassSession, DayOfWeek, Faculty, Room, TimeSlot } from "./types";
 
 // Define buildings and rooms
@@ -12,12 +13,14 @@ const MORNING_TIME_SLOTS: TimeSlot[] = [
   { startTime: "10:50", endTime: "11:45" }
 ];
 
-const LUNCH_SLOT: TimeSlot = { startTime: "11:45", endTime: "12:40" };
+// Updated lunch timing from 11:30 to 12:10
+const LUNCH_SLOT: TimeSlot = { startTime: "11:30", endTime: "12:10" };
 
 const AFTERNOON_TIME_SLOTS: TimeSlot[] = [
-  { startTime: "12:40", endTime: "13:35" },
-  { startTime: "13:35", endTime: "14:30" },
-  { startTime: "14:30", endTime: "15:25" }
+  { startTime: "12:10", endTime: "13:05" },
+  { startTime: "13:05", endTime: "14:00" },
+  { startTime: "14:00", endTime: "14:55" },
+  { startTime: "14:55", endTime: "15:30" }
 ];
 
 const ALL_TIME_SLOTS = [...MORNING_TIME_SLOTS, LUNCH_SLOT, ...AFTERNOON_TIME_SLOTS];
@@ -203,4 +206,47 @@ export const findCurrentFacultyLocation = (faculty: Faculty): ClassSession | nul
   }
   
   return null; // No class this period
+};
+
+// New function to get a formatted message about faculty location
+export const getFacultyLocationMessage = (faculty: Faculty): { message: string; location?: ClassSession } => {
+  const currentLocation = findCurrentFacultyLocation(faculty);
+  const currentDay = getCurrentDayName();
+  const currentTimeSlot = getCurrentTimeSlot();
+  
+  if (!currentTimeSlot) {
+    return { 
+      message: "Outside of school hours. Faculty is likely not on campus." 
+    };
+  }
+  
+  if (currentLocation) {
+    if (currentLocation.isLunch) {
+      return { 
+        message: `Currently at lunch in the Cafeteria (${currentLocation.timeSlot.startTime} - ${currentLocation.timeSlot.endTime})`,
+        location: currentLocation
+      };
+    }
+    
+    return { 
+      message: `Currently teaching in ${currentLocation.room.building}, ${currentLocation.room.department} Section ${currentLocation.room.section} (${currentLocation.timeSlot.startTime} - ${currentLocation.timeSlot.endTime})`,
+      location: currentLocation
+    };
+  }
+  
+  // Try to find the next class for today
+  const sortedSessions = [...faculty.schedule[currentDay].sessions]
+    .sort((a, b) => a.timeSlot.startTime.localeCompare(b.timeSlot.startTime))
+    .filter(session => session.timeSlot.startTime > (currentTimeSlot?.startTime || ""));
+  
+  if (sortedSessions.length > 0) {
+    const nextSession = sortedSessions[0];
+    return { 
+      message: `Free period. Next class at ${nextSession.timeSlot.startTime} in ${nextSession.room.building}, ${nextSession.room.department} Section ${nextSession.room.section}.`
+    };
+  }
+  
+  return { 
+    message: "No more classes scheduled for today. Faculty may be in their office or off campus."
+  };
 };
