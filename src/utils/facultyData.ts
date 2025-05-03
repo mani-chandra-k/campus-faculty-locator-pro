@@ -131,28 +131,28 @@ const generateWeeklySchedule = (facultyName?: string) => {
       schedule[DayOfWeek.MONDAY].sessions.push(labSession);
     }
     else if (facultyName === "Saritha") {
-      // Modify Saritha's Tuesday schedule from 9:00 to 11:30
-      const specialSession = createSpecialSession("SPECIAL CLASS", "09:00", "11:30");
+      // Modify Saritha's Tuesday schedule from 9:00 to 11:30 to LAB (updated to LAB)
+      const labSession = createSpecialSession("LAB", "09:00", "11:30");
       
       // Filter out any classes in this time range
       schedule[DayOfWeek.TUESDAY].sessions = schedule[DayOfWeek.TUESDAY].sessions.filter(session => 
         session.isLunch || !(session.timeSlot.startTime >= "09:00" && session.timeSlot.startTime < "11:30")
       );
       
-      // Add the special session
-      schedule[DayOfWeek.TUESDAY].sessions.push(specialSession);
+      // Add the LAB session
+      schedule[DayOfWeek.TUESDAY].sessions.push(labSession);
     }
     else if (facultyName === "Sravani") {
-      // Modify Sravani's Saturday schedule from 1:05 to 3:30
-      const specialSession = createSpecialSession("SPECIAL CLASS", "13:05", "15:30");
+      // Modify Sravani's Saturday schedule from 1:05 to 3:30 to LAB (updated to LAB)
+      const labSession = createSpecialSession("LAB", "13:05", "15:30");
       
       // Filter out any classes in this time range
       schedule[DayOfWeek.SATURDAY].sessions = schedule[DayOfWeek.SATURDAY].sessions.filter(session => 
         session.isLunch || !(session.timeSlot.startTime >= "13:05" && session.timeSlot.startTime < "15:30")
       );
       
-      // Add the special session
-      schedule[DayOfWeek.SATURDAY].sessions.push(specialSession);
+      // Add the LAB session
+      schedule[DayOfWeek.SATURDAY].sessions.push(labSession);
     }
     else if (facultyName === "Rajini") {
       // Modify Rajini's Wednesday schedule from 9:00 to 11:30 to SRP

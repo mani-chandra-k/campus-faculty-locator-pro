@@ -37,6 +37,7 @@ const AddFacultyForm: React.FC<AddFacultyFormProps> = ({ onFacultyAdded }) => {
     }
     
     try {
+      setIsAdding(true);
       const newFaculty = addFacultyMember(data.facultyName.trim());
       toast({
         title: "Faculty added successfully",
@@ -44,7 +45,9 @@ const AddFacultyForm: React.FC<AddFacultyFormProps> = ({ onFacultyAdded }) => {
       });
       form.reset();
       onFacultyAdded(newFaculty.name);
+      setIsAdding(false);
     } catch (error) {
+      setIsAdding(false);
       toast({
         title: "Error adding faculty",
         description: "There was a problem adding the faculty member.",
@@ -54,24 +57,20 @@ const AddFacultyForm: React.FC<AddFacultyFormProps> = ({ onFacultyAdded }) => {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6 mb-8">
-      <h2 className="text-2xl font-semibold text-faculty-primary mb-4 flex items-center gap-2">
-        <UserPlus size={24} />
-        Add New Faculty
-      </h2>
-      
+    <div className="max-w-xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="facultyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Faculty Name</FormLabel>
+                <FormLabel className="text-lg text-faculty-primary font-medium">Faculty Name</FormLabel>
                 <FormControl>
                   <Input 
                     placeholder="Enter new faculty name" 
                     {...field} 
+                    className="border-faculty-secondary/30 focus:border-faculty-accent focus:ring-faculty-accent"
                   />
                 </FormControl>
               </FormItem>
@@ -80,10 +79,11 @@ const AddFacultyForm: React.FC<AddFacultyFormProps> = ({ onFacultyAdded }) => {
           
           <Button 
             type="submit"
-            className="w-full md:w-auto"
+            className="w-full md:w-auto bg-gradient-to-r from-faculty-primary to-faculty-accent hover:opacity-90 transition-all duration-300"
+            disabled={isAdding}
           >
-            <UserPlus size={16} className="mr-2" />
-            Add Faculty with Generated Schedule
+            <UserPlus size={18} className="mr-2" />
+            {isAdding ? "Adding Faculty..." : "Add Faculty with Generated Schedule"}
           </Button>
         </form>
       </Form>
