@@ -6,10 +6,12 @@ import FacultySearch from "@/components/FacultySearch";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import FacultyLocationBox from "@/components/FacultyLocationBox";
 import AddFacultyForm from "@/components/AddFacultyForm";
+import FacultyLocatorLogo from "@/components/FacultyLocatorLogo";
+import FacultyMap from "@/components/FacultyMap";
 import { Faculty } from "@/utils/types";
 import { findFacultyByName, getAllFacultyNames } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
-import { UserPlus } from "lucide-react";
+import { UserPlus, School, Book, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -22,6 +24,10 @@ const Index = () => {
     
     if (faculty) {
       setSelectedFaculty(faculty);
+      toast({
+        title: "Faculty found",
+        description: `Showing schedule for ${faculty.name}`,
+      });
     } else {
       toast({
         title: "Faculty not found",
@@ -33,6 +39,10 @@ const Index = () => {
   
   const handleFacultyAdded = (facultyName: string) => {
     handleSearch(facultyName);
+    toast({
+      title: "Faculty added successfully",
+      description: `${facultyName} has been added to the faculty list`,
+    });
   };
 
   return (
@@ -50,16 +60,20 @@ const Index = () => {
             <FacultySearch onSearch={handleSearch} />
           </div>
           
-          <div className="flex flex-col justify-center items-center bg-white p-6 rounded-lg shadow-md border border-faculty-accent/20">
-            <h3 className="text-lg font-semibold text-faculty-primary mb-3">Available Faculty</h3>
-            <div className="flex flex-wrap justify-center gap-2">
+          <div className="bg-gradient-to-br from-white/70 to-faculty-secondary/10 backdrop-blur-sm p-6 rounded-lg shadow-md border border-faculty-accent/20 animate-fade-in">
+            <h3 className="text-lg font-semibold text-faculty-primary mb-3 flex items-center">
+              <School size={20} className="mr-2" />
+              Available Faculty
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {facultyNames.map(name => (
                 <Button 
                   key={name} 
                   variant="outline" 
-                  className="border-faculty-accent/30 hover:bg-faculty-accent/10"
+                  className="border-faculty-accent/30 hover:bg-faculty-accent/10 transition-all duration-300 hover:scale-105"
                   onClick={() => handleSearch(name)}
                 >
+                  <GraduationCap className="mr-2 h-4 w-4" />
                   {name}
                 </Button>
               ))}
@@ -68,7 +82,7 @@ const Index = () => {
         </div>
         
         {!selectedFaculty ? (
-          <Card className="bg-white/80 backdrop-blur-sm border border-faculty-accent/20 shadow-lg">
+          <Card className="bg-white/80 backdrop-blur-sm border border-faculty-accent/20 shadow-lg animate-fade-in">
             <CardHeader className="bg-gradient-to-r from-faculty-secondary/10 to-faculty-accent/10">
               <CardTitle className="text-center text-faculty-primary">Welcome to Faculty Locator</CardTitle>
               <CardDescription className="text-center">
@@ -76,7 +90,8 @@ const Index = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
+              <FacultyLocatorLogo />
+              <div className="text-center py-6">
                 <p className="text-xl text-gray-700 mb-6">
                   Search for a faculty member by name or ID to view their schedule.
                 </p>
@@ -92,26 +107,40 @@ const Index = () => {
           </Card>
         ) : (
           <>
-            <div className="mb-6 bg-white p-6 rounded-lg shadow-md border border-faculty-accent/20">
-              <h2 className="text-3xl font-bold text-faculty-primary">{selectedFaculty.name}'s Schedule</h2>
+            <div className="mb-6 bg-gradient-to-r from-white/90 to-faculty-secondary/10 p-6 rounded-lg shadow-md border border-faculty-accent/20 animate-fade-in">
+              <h2 className="text-3xl font-bold text-faculty-primary flex items-center">
+                <Book className="mr-3" size={28} />
+                {selectedFaculty.name}'s Schedule
+              </h2>
               <p className="text-gray-600">Faculty ID: {selectedFaculty.id}</p>
             </div>
             
-            <FacultyLocationBox faculty={selectedFaculty} />
-            <WeeklySchedule faculty={selectedFaculty} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <FacultyLocationBox faculty={selectedFaculty} />
+                <FacultyMap faculty={selectedFaculty} />
+              </div>
+              <div>
+                <WeeklySchedule faculty={selectedFaculty} />
+              </div>
+            </div>
           </>
         )}
         
         {/* Add Faculty Form - Moved to bottom with attractive design */}
-        <div className="mt-10 bg-gradient-to-r from-faculty-primary/5 to-faculty-accent/5 p-8 rounded-xl shadow-md border border-faculty-accent/20">
+        <div className="mt-10 bg-gradient-to-br from-faculty-primary/5 to-faculty-accent/5 p-8 rounded-xl shadow-lg border border-faculty-accent/20 animate-fade-in">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-faculty-primary inline-flex items-center">
-              <UserPlus size={28} className="mr-2" />
+            <div className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-faculty-primary to-faculty-accent rounded-full mb-4 shadow-lg">
+              <UserPlus size={28} className="text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-faculty-primary">
               Add New Faculty Member
             </h2>
             <p className="text-gray-600 mt-2">Create a new faculty member with auto-generated schedule</p>
           </div>
-          <AddFacultyForm onFacultyAdded={handleFacultyAdded} />
+          <div className="bg-white/80 backdrop-blur-sm border border-faculty-accent/10 rounded-lg p-6 shadow-md">
+            <AddFacultyForm onFacultyAdded={handleFacultyAdded} />
+          </div>
         </div>
       </main>
 
