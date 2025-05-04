@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DayOfWeek, Faculty } from "@/utils/types";
 import DailySchedule from "./DailySchedule";
-import { getCurrentDayName } from "@/utils/facultyData";
-import { Calendar } from "lucide-react";
+import { getCurrentDayName, isHoliday } from "@/utils/facultyData";
+import { Calendar, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface WeeklyScheduleProps {
   faculty: Faculty;
@@ -13,6 +14,7 @@ interface WeeklyScheduleProps {
 
 const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ faculty }) => {
   const currentDay = getCurrentDayName();
+  const holidayCheck = isHoliday();
 
   return (
     <Card className="shadow-lg border border-faculty-accent/20 overflow-hidden">
@@ -23,6 +25,16 @@ const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ faculty }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
+        {holidayCheck.isHoliday && (
+          <Alert className="mb-4 border-yellow-300 bg-yellow-50">
+            <AlertCircle className="h-4 w-4 text-yellow-600" />
+            <AlertTitle className="text-yellow-800">Holiday Notice</AlertTitle>
+            <AlertDescription className="text-yellow-700">
+              Today is {holidayCheck.reason}. No classes are scheduled.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <Tabs defaultValue={currentDay}>
           <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-faculty-secondary/10">
             {Object.values(DayOfWeek).map((day) => (

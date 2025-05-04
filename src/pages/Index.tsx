@@ -7,12 +7,12 @@ import WeeklySchedule from "@/components/WeeklySchedule";
 import FacultyLocationBox from "@/components/FacultyLocationBox";
 import AddFacultyForm from "@/components/AddFacultyForm";
 import FacultyLocatorLogo from "@/components/FacultyLocatorLogo";
-import FacultyMap from "@/components/FacultyMap";
 import { Faculty } from "@/utils/types";
-import { findFacultyByName, getAllFacultyNames } from "@/utils/facultyData";
+import { findFacultyByName, getAllFacultyNames, getFacultyLocationMessage } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
 import { UserPlus, School, Book, GraduationCap, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CampusBlockMap from "@/components/CampusBlockMap";
 
 const Index = () => {
   const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
@@ -44,6 +44,12 @@ const Index = () => {
       description: `${facultyName} has been added to the faculty list`,
     });
   };
+
+  // Get location info for the selected faculty
+  const locationInfo = selectedFaculty ? getFacultyLocationMessage(selectedFaculty) : null;
+  const currentLocation = locationInfo?.location?.room;
+  const isHoliday = locationInfo?.isHoliday;
+  const holidayReason = locationInfo?.holidayReason;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-faculty-background to-blue-50">
@@ -146,7 +152,12 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <FacultyLocationBox faculty={selectedFaculty} />
-                <FacultyMap faculty={selectedFaculty} />
+                <CampusBlockMap 
+                  faculty={selectedFaculty} 
+                  currentLocation={currentLocation} 
+                  isHoliday={isHoliday} 
+                  holidayReason={holidayReason}
+                />
               </div>
               <div>
                 <WeeklySchedule faculty={selectedFaculty} />

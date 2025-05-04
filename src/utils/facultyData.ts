@@ -25,6 +25,16 @@ const AFTERNOON_TIME_SLOTS: TimeSlot[] = [
 
 const ALL_TIME_SLOTS = [...MORNING_TIME_SLOTS, LUNCH_SLOT, ...AFTERNOON_TIME_SLOTS];
 
+// Public holidays (you can add more as needed)
+export const PUBLIC_HOLIDAYS = [
+  { day: 1, month: 1, description: "New Year's Day" },
+  { day: 26, month: 1, description: "Republic Day" },
+  { day: 15, month: 8, description: "Independence Day" },
+  { day: 2, month: 10, description: "Gandhi Jayanti" },
+  { day: 25, month: 12, description: "Christmas" },
+  // Add more holidays as needed
+];
+
 // Helper function to generate a random room
 const getRandomRoom = (): Room => {
   const building = BUILDINGS[Math.floor(Math.random() * BUILDINGS.length)];
@@ -249,6 +259,26 @@ export const getAllFacultyNames = (): string[] => {
   return facultyData.map(faculty => faculty.name);
 };
 
+// Check if today is a public holiday or Sunday
+export const isHoliday = (date: Date = new Date()): { isHoliday: boolean; reason: string } => {
+  // Check if it's Sunday (day 0)
+  if (date.getDay() === 0) {
+    return { isHoliday: true, reason: "Sunday" };
+  }
+  
+  // Check if it's a public holiday
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // JavaScript months are 0-based
+  
+  const holiday = PUBLIC_HOLIDAYS.find(h => h.day === day && h.month === month);
+  
+  if (holiday) {
+    return { isHoliday: true, reason: holiday.description };
+  }
+  
+  return { isHoliday: false, reason: "" };
+};
+
 // Get current day name
 export const getCurrentDayName = (): DayOfWeek => {
   const days = [
@@ -285,6 +315,12 @@ export const getCurrentTimeSlot = (): TimeSlot | null => {
 
 // Find where a faculty is right now
 export const findCurrentFacultyLocation = (faculty: Faculty): ClassSession | null => {
+  // Check if it's a holiday first
+  const holidayCheck = isHoliday();
+  if (holidayCheck.isHoliday) {
+    return null; // No location on holidays
+  }
+  
   const currentDay = getCurrentDayName();
   const currentTimeSlot = getCurrentTimeSlot();
   
@@ -307,7 +343,17 @@ export const findCurrentFacultyLocation = (faculty: Faculty): ClassSession | nul
 };
 
 // New function to get a formatted message about faculty location
-export const getFacultyLocationMessage = (faculty: Faculty): { message: string; location?: ClassSession } => {
+export const getFacultyLocationMessage = (faculty: Faculty): { message: string; location?: ClassSession; isHoliday?: boolean; holidayReason?: string } => {
+  // Check if it's a holiday first
+  const holidayCheck = isHoliday();
+  if (holidayCheck.isHoliday) {
+    return { 
+      message: `Today is a holiday (${holidayCheck.reason}). Faculty are not expected to be on campus.`,
+      isHoliday: true,
+      holidayReason: holidayCheck.reason
+    };
+  }
+  
   const currentLocation = findCurrentFacultyLocation(faculty);
   const currentDay = getCurrentDayName();
   const currentTimeSlot = getCurrentTimeSlot();

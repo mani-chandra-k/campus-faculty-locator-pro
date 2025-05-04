@@ -38,3 +38,9 @@ export enum DayOfWeek {
   FRIDAY = "friday",
   SATURDAY = "saturday"
 }
+
+export interface Holiday {
+  day: number;
+  month: number;
+  description: string;
+}
