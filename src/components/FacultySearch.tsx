@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { getAllFacultyNames } from "@/utils/facultyData";
 import { Card } from "./ui/card";
-import { CommandList, CommandGroup, CommandItem } from "./ui/command";
+import { Command } from "./ui/command";
 
 interface FacultySearchProps {
   onSearch: (facultyName: string) => void;
@@ -96,20 +96,20 @@ const FacultySearch: React.FC<FacultySearchProps> = ({ onSearch }) => {
           {/* Predictive Search Results */}
           {showPredictions && (
             <div className="absolute w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200 z-50 max-h-60 overflow-y-auto animate-fade-in">
-              <CommandList>
-                <CommandGroup heading="Faculty Suggestions">
+              <Command>
+                <div className="p-2">
                   {filteredNames.map((name) => (
-                    <CommandItem 
+                    <div 
                       key={name} 
-                      className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
-                      onSelect={() => handlePredictionClick(name)}
+                      className="flex items-center p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      onClick={() => handlePredictionClick(name)}
                     >
                       <User className="mr-2 h-4 w-4 text-faculty-secondary" />
                       <span>{name}</span>
-                    </CommandItem>
+                    </div>
                   ))}
-                </CommandGroup>
-              </CommandList>
+                </div>
+              </Command>
             </div>
           )}
         </div>
