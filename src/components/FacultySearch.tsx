@@ -3,13 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, MapPin, User } from "lucide-react";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getAllFacultyNames } from "@/utils/facultyData";
 import { Card } from "./ui/card";
 import { Command } from "./ui/command";
@@ -58,11 +51,6 @@ const FacultySearch: React.FC<FacultySearchProps> = ({ onSearch }) => {
     }
   };
 
-  const handleSelectSearch = (value: string) => {
-    setSearchValue(value);
-    onSearch(value);
-  };
-
   const handlePredictionClick = (name: string) => {
     setSearchValue(name);
     onSearch(name);
@@ -75,8 +63,8 @@ const FacultySearch: React.FC<FacultySearchProps> = ({ onSearch }) => {
         <Search className="mr-2" size={24} />
         Find Faculty
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="md:col-span-3 relative" ref={searchRef}>
+      <div className="grid grid-cols-1 gap-4">
+        <div className="relative" ref={searchRef}>
           <form onSubmit={handleInputSearch}>
             <div className="relative">
               <Input
@@ -90,6 +78,13 @@ const FacultySearch: React.FC<FacultySearchProps> = ({ onSearch }) => {
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-faculty-secondary" 
                 size={16} 
               />
+              <Button 
+                type="submit" 
+                className="absolute right-0 top-0 h-full bg-faculty-primary hover:bg-faculty-accent transition-all duration-300 group flex items-center"
+              >
+                <Search size={16} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                Search
+              </Button>
             </div>
           </form>
           
@@ -113,30 +108,6 @@ const FacultySearch: React.FC<FacultySearchProps> = ({ onSearch }) => {
             </div>
           )}
         </div>
-        
-        <div className="md:col-span-2">
-          <Select onValueChange={handleSelectSearch}>
-            <SelectTrigger className="w-full border-faculty-secondary/30 focus:border-faculty-accent focus:ring-faculty-accent bg-white/80 hover:bg-white transition-all duration-300">
-              <SelectValue placeholder="Select faculty" />
-            </SelectTrigger>
-            <SelectContent className="bg-white/95 backdrop-blur-sm border-faculty-accent/20">
-              {facultyNames.map((name) => (
-                <SelectItem key={name} value={name} className="hover:bg-faculty-accent/10">
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <Button 
-          type="submit" 
-          onClick={() => onSearch(searchValue)} 
-          className="bg-faculty-primary hover:bg-faculty-accent transition-all duration-300 group flex items-center"
-        >
-          <Search size={16} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-          Search
-        </Button>
       </div>
     </Card>
   );

@@ -231,6 +231,19 @@ export const addFacultyMember = (name: string): Faculty => {
   return newFaculty;
 };
 
+// Add new faculty with custom schedule
+export const addFacultyWithCustomSchedule = (name: string, schedule: Record<DayOfWeek, { sessions: ClassSession[] }>) => {
+  const id = `F${(facultyData.length + 1).toString().padStart(3, '0')}`;
+  const newFaculty: Faculty = {
+    id,
+    name,
+    schedule
+  };
+  
+  facultyData.push(newFaculty);
+  return newFaculty;
+};
+
 // Get all faculty names for dropdown
 export const getAllFacultyNames = (): string[] => {
   return facultyData.map(faculty => faculty.name);

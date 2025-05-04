@@ -1,35 +1,43 @@
 
-import React from "react";
-import { GraduationCap, MapPin, Book, Search } from "lucide-react";
+import React from 'react';
+import { School, MapPin, GraduationCap, Sparkles } from 'lucide-react';
 
-const FacultyLocatorLogo: React.FC = () => {
+const FacultyLocatorLogo = () => {
   return (
-    <div className="flex flex-col items-center justify-center my-8 animate-fade-in">
-      <div className="relative">
-        {/* Outer circle */}
-        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-faculty-primary to-faculty-accent flex items-center justify-center shadow-lg">
+    <div className="py-8 flex flex-col items-center justify-center">
+      <div className="relative w-40 h-40 mb-6">
+        {/* Main circular background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-faculty-primary to-faculty-accent rounded-full shadow-xl flex items-center justify-center animate-pulse-slow">
           {/* Inner circle */}
-          <div className="w-24 h-24 rounded-full bg-white/90 flex items-center justify-center relative">
-            {/* Main icon */}
-            <GraduationCap className="w-12 h-12 text-faculty-primary" />
+          <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center relative overflow-hidden">
+            {/* Campus building icon */}
+            <School className="w-16 h-16 text-faculty-primary animate-bounce-slow" />
             
-            {/* Orbiting icons */}
-            <div className="absolute w-full h-full animate-spin-slow">
-              <MapPin className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-faculty-accent" />
-              <Book className="absolute top-1/2 right-0 transform translate-y-1/2 w-6 h-6 text-faculty-secondary" />
-              <Search className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-6 h-6 text-faculty-primary" />
+            {/* Decorative elements */}
+            <GraduationCap className="absolute top-4 left-4 w-6 h-6 text-faculty-secondary" />
+            <MapPin className="absolute bottom-4 right-4 w-6 h-6 text-faculty-accent" />
+            <Sparkles className="absolute bottom-3 left-3 w-5 h-5 text-yellow-400 animate-spin-slow" />
+          </div>
+        </div>
+        
+        {/* Orbiting pin */}
+        <div className="absolute w-full h-full animate-spin-slow" style={{ animationDuration: '8s' }}>
+          <div className="absolute -right-2 top-1/2 transform -translate-y-1/2">
+            <div className="bg-faculty-accent p-2 rounded-full shadow-lg">
+              <MapPin className="w-5 h-5 text-white" />
             </div>
           </div>
         </div>
-
-        {/* Pulse effect */}
-        <div className="absolute inset-0 rounded-full bg-faculty-primary animate-ping opacity-20"></div>
       </div>
-
-      <h3 className="mt-4 text-xl font-bold bg-gradient-to-r from-faculty-primary to-faculty-accent bg-clip-text text-transparent">
-        Campus Faculty Locator Pro
-      </h3>
-      <p className="text-sm text-gray-500">Find faculty members quickly across campus</p>
+      
+      <h2 className="text-3xl font-bold text-faculty-primary text-center mb-1 flex items-center">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-faculty-primary to-faculty-accent">Faculty Locator</span>
+        <Sparkles className="ml-2 text-yellow-400 animate-pulse" size={20} />
+      </h2>
+      
+      <div className="text-lg text-faculty-secondary font-medium">
+        <span className="animate-pulse">Find Faculty • Track Schedules • Navigate Campus</span>
+      </div>
     </div>
   );
 };
