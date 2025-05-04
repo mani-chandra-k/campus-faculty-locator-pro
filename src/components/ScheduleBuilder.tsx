@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -187,14 +188,18 @@ const ScheduleBuilder: React.FC<ScheduleBuilderProps> = ({ onComplete }) => {
         </div>
         
         <div className="p-4 border border-dashed border-faculty-secondary/40 rounded-lg">
-          <FormItem className="mb-4">
-            <FormLabel className="text-lg text-faculty-primary font-medium">Faculty Name</FormLabel>
-            <Input 
-              placeholder="Enter faculty name" 
-              {...form.register("facultyName")}
-              className="border-faculty-secondary/30 focus:border-faculty-accent focus:ring-faculty-accent"
-            />
-          </FormItem>
+          <Form {...form}>
+            <FormItem className="mb-4">
+              <FormLabel className="text-lg text-faculty-primary font-medium">Faculty Name</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Enter faculty name" 
+                  {...form.register("facultyName")}
+                  className="border-faculty-secondary/30 focus:border-faculty-accent focus:ring-faculty-accent"
+                />
+              </FormControl>
+            </FormItem>
+          </Form>
         </div>
       </div>
       
