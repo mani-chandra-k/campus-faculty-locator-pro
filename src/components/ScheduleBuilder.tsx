@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Calendar, Clock, Briefcase, BookOpen, Coffee, School, Plus } from "lucide-react";
+import { Calendar, Clock, Briefcase, BookOpen, Coffee, School, Plus, UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { addFacultyWithCustomSchedule } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
