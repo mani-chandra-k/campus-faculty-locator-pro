@@ -7,6 +7,7 @@ import WeeklySchedule from "@/components/WeeklySchedule";
 import FacultyLocationBox from "@/components/FacultyLocationBox";
 import AddFacultyForm from "@/components/AddFacultyForm";
 import FacultyLocatorLogo from "@/components/FacultyLocatorLogo";
+import Navigation from "@/components/Navigation";
 import { Faculty } from "@/utils/types";
 import { findFacultyByName, getAllFacultyNames, getFacultyLocationMessage } from "@/utils/facultyData";
 import { useToast } from "@/components/ui/use-toast";
@@ -53,6 +54,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-faculty-background to-blue-50">
+      <Navigation />
+      
       <header className="bg-gradient-to-r from-faculty-primary to-faculty-accent text-white py-8 shadow-lg relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.1),transparent_50%)]"></div>

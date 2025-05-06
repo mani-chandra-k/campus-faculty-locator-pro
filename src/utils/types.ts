@@ -44,3 +44,24 @@ export interface Holiday {
   month: number;
   description: string;
 }
+
+// Blog related interfaces
+export interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  authorId: string;
+  createdAt: Date;
+  category: string;
+  tags: string[];
+  image?: string;
+}
+
+export interface BlogComment {
+  id: string;
+  postId: string;
+  author: string;
+  content: string;
+  createdAt: Date;
+}
